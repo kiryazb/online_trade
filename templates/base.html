@@ -11,8 +11,8 @@
     <header>
         <div class="btn-container">
             <a href="{{ url_for('main_page.index')}}" class="btn btn-trade-online">Trade Online</a>
-            <a href="#" class="btn btn-login">Вход</a>
-            <a href="#" class="btn btn-register">Регистрация</a>
+            <a href="{{ url_for('auth.login')}}" class="btn btn-login">Вход</a>
+            <a href="{{ url_for('auth.register')}}" class="btn btn-register">Регистрация</a>
         </div>
     </header>
 

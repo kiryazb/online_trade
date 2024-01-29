@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <title>Личный профиль</title>
+  <link rel="stylesheet" href="{{url_for('auth.static', filename='css/profile_styles.css')}}"/>
+<body>
+
+  <div class="profile-container">
+    <img class="profile-picture" src="your_profile_picture.jpg" alt="Profile Picture">
+    <div class="username">{{ username }}</div>
+    <div class="bio">Привет, я здесь! Люблю программирование, дизайн и кофе. 🚀☕</div>
+    <div class="social-links">
+      <a class="social-link" href="https://twitter.com/ваш_твиттер" target="_blank">Twitter</a>
+      <a class="social-link" href="https://www.instagram.com/ваш_instagram" target="_blank">Instagram</a>
+      <a class="social-link" href="https://github.com/ваш_github" target="_blank">GitHub</a>
+    </div>
+  </div>
+
+</body>
+{% endblock %}
