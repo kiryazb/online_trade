@@ -2,5 +2,33 @@
 
 
 {% block content %}
-dfsdsff
+<link rel="stylesheet" href="{{url_for('main_page.static', filename='css/styles.css')}}"/>
+
+{% set total_rectangles = len %}
+{% set rectangles_per_row = 4 %}
+{% set rows = (total_rectangles // rectangles_per_row) + (1 if total_rectangles % rectangles_per_row != 0 else 0) %}
+
+{% for row in range(rows) %}
+    <div class="row">
+        {% for col in range(rectangles_per_row) %}
+            {% set index = row * rectangles_per_row + col %}
+            {% if index < total_rectangles %}
+        <form action=" " method="post">
+                <div class="rectangle">
+                    <div class="content">
+                        <p>{{ offers[index].user.username }} хочет:</p>
+                        <img src="data:;base64,{{image_list_want[index]}}" alt="image" width="150" height="150"/>
+                        <p>{{ offers[index].description_want }}</p>
+                        <p>{{ offers[index].user.username }} предлагает:</p>
+                        <img src="data:;base64,{{image_list_have[index]}}" alt="image" width="150" height="150"/>
+                        <p>{{ offers[index].description_have }}</p>
+                        <input id="submit" name="submit" type="submit" value="Обменяться">
+                    </div>
+                </div>
+        </form>
+            {% endif %}
+        {% endfor %}
+        <div style="clear:both;"></div> <!-- Clear the float after each row -->
+    </div>
+{% endfor %}
 {% endblock %}

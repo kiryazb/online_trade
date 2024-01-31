@@ -8,6 +8,7 @@ from auth.views import auth, login_manager
 from flask_sqlalchemy import SQLAlchemy
 
 from database import db
+from trade.views import trade
 
 DEBUG = True
 
@@ -17,6 +18,7 @@ login_manager.init_app(app)
 
 app.register_blueprint(main_page)
 app.register_blueprint(auth)
+app.register_blueprint(trade)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:070405@localhost:5432/online_trade'
 
@@ -25,6 +27,7 @@ app.config['SECRET_KEY'] = 'dslfldkpaldkaspojifajsiojadasioadio'
 
 def main():
     from auth.models import User
+    from trade.models import TradeOffer
     db.init_app(app)
 
     with app.app_context():

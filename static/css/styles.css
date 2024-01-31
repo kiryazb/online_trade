@@ -12,15 +12,6 @@ header {
     text-align: right;
 }
 
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
 .btn-container {
     text-align: right;
     margin-top: 10px;
@@ -44,7 +35,31 @@ header {
 }
 
 .btn-trade-online {
-    background-color: #e74c3c;
     float: left;
     margin-right: 10px;
+}
+
+.btn-offer-create {
+    background-color: #e74c3c;
+    float: left;
+    margin-right: 20px;
+}
+
+
+.flash {
+    padding: 10px;
+    width: 150px;  /* Set the width */
+    height: 50px;  /* Set the height */
+    overflow: hidden;  /* Hide any content that exceeds the fixed size */
+    margin-bottom: 10px;  /* Add margin for spacing between flash messages */
+}
+
+.flash.success {
+    border: 1px solid #21DB56;
+    background: #AEFFC5;
+}
+
+.flash.error {
+    border: 1px solid #FF4343;
+    background: #FF9C9C;
 }

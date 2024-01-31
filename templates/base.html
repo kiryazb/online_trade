@@ -5,25 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Добро пожаловать</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}" />
+    <link rel="stylesheet" href="{{url_for('static', filename='css/styles.css')}}"/>
 </head>
-<body>
-    <header>
-        <div class="btn-container">
-            <a href="{{ url_for('main_page.index')}}" class="btn btn-trade-online">Trade Online</a>
-            {% if current_user.is_authenticated %}
-                <a href="{{ url_for('auth.profile', username=current_user.username)}}" class="btn btn-login">{{ current_user.username }}</a>
-                <a href="{{ url_for('auth.logout')}}" class="btn btn-register">Выйти</a>
-            {% else %}
-                <p><a href="{{ url_for('auth.login')}}" class="btn btn-login">Вход</a>
-                <a href="{{ url_for('auth.register')}}" class="btn btn-register">Регистрация</a></p>
-    {% endif %}
-        </div>
-    </header>
 
-    <div class="container">
-        {% block content %}
-        {% endblock %}
+
+<body>
+<header>
+    <div class="btn-container">
+        <a href="{{ url_for('main_page.index')}}" class="btn btn-trade-online">Trade Online</a>
+        <a href="{{ url_for('trade.create_offer')}}" class="btn btn-offer-create">Обмен</a>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.profile', username=current_user.username)}}" class="btn btn-login">{{
+            current_user.username }}</a>
+        <a href="{{ url_for('auth.logout')}}" class="btn btn-register">Выйти</a>
+        {% else %}
+        <p><a href="{{ url_for('auth.login')}}" class="btn btn-login">Вход</a>
+            <a href="{{ url_for('auth.register')}}" class="btn btn-register">Регистрация</a></p>
+        {% endif %}
     </div>
+</header>
+
+<div class="container">
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}">{{msg}}</div>
+    {% endfor %}
+    {% block content %}
+    {% endblock %}
+</div>
 </body>
 </html>

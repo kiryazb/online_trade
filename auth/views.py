@@ -15,11 +15,11 @@ def register():
 
     if request.method == "POST" and form.validate_on_submit():
         try:
-            flash("Успешная регистрация", category="success")
             hash_password = generate_password_hash(request.form['password'])
             user = User(username=request.form['username'], email=request.form['email'], password=hash_password)
             db.session.add(user)
             db.session.commit()
+            flash("Успешная регистрация", category="success")
             return redirect(url_for('auth.login'))
         except:
             db.session.rollback()
@@ -37,17 +37,20 @@ def load_user(user_id):
 def login():
     form = LoginForm()
 
-    if request.method == "POST" and form.validate_on_submit():
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == "POST":
+        if form.validate_on_submit():
+            username = request.form['username']
+            password = request.form['password']
 
-        user = User.query.filter_by(username=username).first()
+            user = User.query.filter_by(username=username).first()
 
-        if user and check_password_hash(user.password, password):
-            login_user(user, remember=form.remember.data)
-            return redirect(url_for("auth.profile", username=username))
+            if user and check_password_hash(user.password, password):
+                login_user(user, remember=form.remember.data)
+                return redirect(url_for("auth.profile", username=username))
+            else:
+                flash('Неверное имя пользователя или пароль', category="error")
         else:
-            flash('Неверное имя пользователя или пароль', category="error")
+            flash('Введены некорректные данные', category="error")
 
     return render_template("auth/login_form.html", form=form)
 
