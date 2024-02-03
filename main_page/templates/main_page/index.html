@@ -31,4 +31,15 @@
         <div style="clear:both;"></div> <!-- Clear the float after each row -->
     </div>
 {% endfor %}
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+<script type="text/javascript">
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    socket.on('user_response', function (msg) {
+        alert(msg.data);
+        // Здесь вы можете обновить ваш интерфейс или выполнить другие действия
+    });
+</script>
+
 {% endblock %}

@@ -2,8 +2,10 @@ import os
 from flask import Flask, render_template
 from flask_login import LoginManager
 
-from main_page.views import main_page
+from main_page.views import main_page, socketio
 from auth.views import auth, login_manager
+
+from flask_socketio import SocketIO
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -24,6 +26,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:070405@localhost:
 
 app.config['SECRET_KEY'] = 'dslfldkpaldkaspojifajsiojadasioadio'
 
+socketio.init_app(app)
+
 
 def main():
     from auth.models import User
@@ -33,7 +37,7 @@ def main():
     with app.app_context():
         db.create_all()
 
-    app.run(debug=True)
+    socketio.run(app, allow_unsafe_werkzeug=True)
 
 
 if __name__ == "__main__":
