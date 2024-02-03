@@ -26,8 +26,15 @@ def index():
 
     if request.method == "POST":
         if current_user.is_authenticated:
-            socketio.emit('user_response', {'data': 'Пользователь откликнулся на предложение'})
+            print("cgg")
+            socketio.emit('user_response')
         else:
+            print("dfdfd")
             socketio.emit('user_response', {'data': 'Необходимо зарегистрироваться'})
-    return render_template("main_page/index.html", offers=offers,
-                           image_list_want=image_list_want, image_list_have=image_list_have, len=len(offers))
+    return render_template("main_page/index.html",
+                           offers=offers,
+                           image_list_want=image_list_want,
+                           image_list_have=image_list_have,
+                           len=len(offers),
+                           current_username=current_user.username if current_user.is_authenticated else None)
+

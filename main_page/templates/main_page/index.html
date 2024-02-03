@@ -1,36 +1,42 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 <link rel="stylesheet" href="{{url_for('main_page.static', filename='css/styles.css')}}"/>
 
-{% set total_rectangles = len %}
-{% set rectangles_per_row = 4 %}
-{% set rows = (total_rectangles // rectangles_per_row) + (1 if total_rectangles % rectangles_per_row != 0 else 0) %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script>
+    function showNotification(username) {
+        if ({{ current_username is not none | tojson | safe }}) {
+        toastr.success("Обмен с " + username + " успешно завершен!");
+        }
+    };
 
-{% for row in range(rows) %}
-    <div class="row">
-        {% for col in range(rectangles_per_row) %}
-            {% set index = row * rectangles_per_row + col %}
-            {% if index < total_rectangles %}
-        <form action=" " method="post">
-                <div class="rectangle">
-                    <div class="content">
-                        <p>{{ offers[index].user.username }} хочет:</p>
-                        <img src="data:;base64,{{image_list_want[index]}}" alt="image" width="150" height="150"/>
-                        <p>{{ offers[index].description_want }}</p>
-                        <p>{{ offers[index].user.username }} предлагает:</p>
-                        <img src="data:;base64,{{image_list_have[index]}}" alt="image" width="150" height="150"/>
-                        <p>{{ offers[index].description_have }}</p>
-                        <input id="submit" name="submit" type="submit" value="Обменяться">
-                    </div>
-                </div>
-        </form>
-            {% endif %}
-        {% endfor %}
-        <div style="clear:both;"></div> <!-- Clear the float after each row -->
-    </div>
-{% endfor %}
+    $(document).ready(function() {
+        $('form').submit(function(e) {
+            e.preventDefault();
+
+            // Получаем значение username из скрытого поля формы
+            var username = $(this).find('[name="username"]').val();
+
+            // Отправляем POST-запрос
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(),
+                success: function(response) {
+                    // Если запрос успешен, показываем уведомление
+                    showNotification(username);
+                },
+                error: function(xhr, status, error) {
+                    // Если произошла ошибка при запросе, выводим сообщение в консоль
+                    console.error('Ошибка при отправке формы:', error);
+                }
+            });
+        });
+    });
+</script>
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
 <script type="text/javascript">
@@ -41,5 +47,34 @@
         // Здесь вы можете обновить ваш интерфейс или выполнить другие действия
     });
 </script>
+
+{% set total_rectangles = len %}
+{% set rectangles_per_row = 4 %}
+{% set rows = (total_rectangles // rectangles_per_row) + (1 if total_rectangles % rectangles_per_row != 0 else 0) %}
+
+{% for row in range(rows) %}
+    <div class="row">
+        {% for col in range(rectangles_per_row) %}
+            {% set index = row * rectangles_per_row + col %}
+            {% if index < total_rectangles %}
+                <form action=" " method="post">
+                    <div class="rectangle">
+                        <div class="content">
+                            <p>{{ offers[index].user.username }} хочет:</p>
+                            <img src="data:;base64,{{image_list_want[index]}}" alt="image" width="150" height="150"/>
+                            <p>{{ offers[index].description_want }}</p>
+                            <p>{{ offers[index].user.username }} предлагает:</p>
+                            <img src="data:;base64,{{image_list_have[index]}}" alt="image" width="150" height="150"/>
+                            <p>{{ offers[index].description_have }}</p>
+                            <input type="hidden" name="username" value="{{ offers[index].user.username }}">
+                            <input id="submit" name="submit" type="submit" value="Обменяться">
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
+        {% endfor %}
+        <div style="clear:both;"></div> <!-- Clear the float after each row -->
+    </div>
+{% endfor %}
 
 {% endblock %}
