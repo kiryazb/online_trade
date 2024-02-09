@@ -3,40 +3,40 @@
 {% block content %}
 <link rel="stylesheet" href="{{url_for('main_page.static', filename='css/styles.css')}}"/>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-<script>
-    function showNotification(username) {
-        if ({{ current_username is not none | tojson | safe }}) {
-        toastr.success("Обмен с " + username + " успешно завершен!");
-        }
-    };
+<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">-->
+<!--<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>-->
+<!--<script>-->
+<!--    function showNotification(username) {-->
+<!--        if ({{ current_username is not none | tojson | safe }}) {-->
+<!--        toastr.success("Обмен с " + username + " успешно завершен!");-->
+<!--        }-->
+<!--    };-->
 
-    $(document).ready(function() {
-        $('form').submit(function(e) {
-            e.preventDefault();
+<!--    $(document).ready(function() {-->
+<!--        $('form').submit(function(e) {-->
+<!--            e.preventDefault();-->
 
-            // Получаем значение username из скрытого поля формы
-            var username = $(this).find('[name="username"]').val();
+<!--            // Получаем значение username из скрытого поля формы-->
+<!--            var username = $(this).find('[name="username"]').val();-->
 
-            // Отправляем POST-запрос
-            $.ajax({
-                type: 'POST',
-                url: $(this).attr('action'),
-                data: $(this).serialize(),
-                success: function(response) {
-                    // Если запрос успешен, показываем уведомление
-                    showNotification(username);
-                },
-                error: function(xhr, status, error) {
-                    // Если произошла ошибка при запросе, выводим сообщение в консоль
-                    console.error('Ошибка при отправке формы:', error);
-                }
-            });
-        });
-    });
-</script>
+<!--            // Отправляем POST-запрос-->
+<!--            $.ajax({-->
+<!--                type: 'POST',-->
+<!--                url: $(this).attr('action'),-->
+<!--                data: $(this).serialize(),-->
+<!--                success: function(response) {-->
+<!--                    // Если запрос успешен, показываем уведомление-->
+<!--                    showNotification(username);-->
+<!--                },-->
+<!--                error: function(xhr, status, error) {-->
+<!--                    // Если произошла ошибка при запросе, выводим сообщение в консоль-->
+<!--                    console.error('Ошибка при отправке формы:', error);-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
 <script type="text/javascript">
@@ -60,6 +60,7 @@
                 <form action=" " method="post">
                     <div class="rectangle">
                         <div class="content">
+                            <input type="hidden" name="card_index" value="{{ index }}">
                             <p>{{ offers[index].user.username }} хочет:</p>
                             <img src="data:;base64,{{image_list_want[index]}}" alt="image" width="150" height="150"/>
                             <p>{{ offers[index].description_want }}</p>

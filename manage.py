@@ -10,6 +10,7 @@ from flask_socketio import SocketIO
 from flask_sqlalchemy import SQLAlchemy
 
 from database import db
+from settings import DATABASE, SECRET_KEY
 from trade.views import trade
 
 DEBUG = True
@@ -22,9 +23,9 @@ app.register_blueprint(main_page)
 app.register_blueprint(auth)
 app.register_blueprint(trade)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:070405@localhost:5432/online_trade'
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE
 
-app.config['SECRET_KEY'] = 'dslfldkpaldkaspojifajsiojadasioadio'
+app.config['SECRET_KEY'] = SECRET_KEY
 
 socketio.init_app(app)
 

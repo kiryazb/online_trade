@@ -4,6 +4,7 @@ from auth.forms import RegisterForm, LoginForm
 from auth.models import User
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from database import db
+from main_page.views import socketio
 
 auth = Blueprint('auth', __name__, template_folder='templates', static_folder='static', static_url_path='/static/auth')
 login_manager = LoginManager()
@@ -46,6 +47,7 @@ def login():
 
             if user and check_password_hash(user.password, password):
                 login_user(user, remember=form.remember.data)
+                user_sid[user.id] = None
                 return redirect(url_for("auth.profile", username=username))
             else:
                 flash('Неверное имя пользователя или пароль', category="error")
@@ -70,3 +72,12 @@ def profile(username):
         return redirect(url_for('auth.profile', username=current_user.username))
 
     return render_template("auth/profile.html", username=username)
+
+
+user_sid = {}
+
+
+@socketio.on('connect')
+def handle_connect():
+    if current_user.is_authenticated:
+        user_sid[current_user.id] = request.sid

@@ -12,6 +12,8 @@ main_page = Blueprint('main_page', __name__,
 
 socketio = SocketIO()
 
+from auth.views import user_sid
+
 
 @main_page.route('/', methods=['GET', 'POST'])
 def index():
@@ -27,7 +29,13 @@ def index():
     if request.method == "POST":
         if current_user.is_authenticated:
             print("cgg")
-            socketio.emit('user_response')
+            print(user_sid)
+            user_id = int(offers[int(request.form.get('card_index'))].user_id)
+            print(offers[int(request.form.get('card_index'))].user_id, user_sid)
+            try:
+                socketio.emit('notification', {'msg': 'Вам пришел обмен'}, to=user_sid[user_id])
+            except:
+                pass
         else:
             print("dfdfd")
             socketio.emit('user_response', {'data': 'Необходимо зарегистрироваться'})
@@ -37,4 +45,3 @@ def index():
                            image_list_have=image_list_have,
                            len=len(offers),
                            current_username=current_user.username if current_user.is_authenticated else None)
-
